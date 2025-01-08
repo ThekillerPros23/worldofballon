@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "yappy-js-front-sdk": "file:yappy-js-front-sdk-1.1.200.tgz"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
