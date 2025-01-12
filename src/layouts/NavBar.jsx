@@ -1,7 +1,32 @@
-import { Navbar, Button } from "flowbite-react";
+import { Navbar, Button, Dropdown, Avatar } from "flowbite-react";
 import image from "../../src/assets/worldofballonLogo.jpg";
+import { auth } from "../auth/FirebaseAuth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function NavBar() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser); // Actualiza el estado del usuario
+    });
+
+    return () => unsubscribe(); // Limpia el listener
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      setUser(null); // Resetea el estado del usuario
+      navigate("/login"); // Redirige al login tras cerrar sesión
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
   return (
     <Navbar
       className="bg-gray-900 text-white sticky top-0 z-50 shadow-lg"
@@ -52,24 +77,49 @@ function NavBar() {
           Nosotros
         </Navbar.Link>
 
-        {/* Botón para versión móvil */}
-        <Button
-          href="/login"
-          gradientDuoTone="purpleToBlue"
-          className="block md:hidden mt-3"
-        >
-          Iniciar Sesión
-        </Button>
+        {/* Si el usuario está autenticado, muestra el avatar con el dropdown */}
+        {user ? (
+          <Dropdown
+            arrowIcon={true}
+            inline={true}
+            label={
+              <Avatar
+                img={user.photoURL || "https://via.placeholder.com/150"}
+                rounded={true}
+              />
+            }
+          >
+            <Dropdown.Header>
+              <span className="block text-sm">{user.displayName || "Usuario"}</span>
+              <span className="block truncate text-sm font-medium">
+                {user.email}
+              </span>
+            </Dropdown.Header>
+            <Dropdown.Item onClick={() => navigate("/dashboard")}>
+              Dashboard
+            </Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
+          </Dropdown>
+        ) : (
+          // Si no está autenticado, muestra el botón de "Iniciar Sesión"
+          <>
+            <Button
+              href="/login"
+              gradientDuoTone="purpleToBlue"
+              className="hidden md:block"
+            >
+              Iniciar Sesión
+            </Button>
+            <Button
+              href="/login"
+              gradientDuoTone="purpleToBlue"
+              className="block md:hidden mt-3"
+            >
+              Iniciar Sesión
+            </Button>
+          </>
+        )}
       </Navbar.Collapse>
-
-      {/* Botón para versión de escritorio */}
-      <Button
-        href="/login"
-        gradientDuoTone="purpleToBlue"
-        className="hidden md:block"
-      >
-        Iniciar Sesión
-      </Button>
     </Navbar>
   );
 }

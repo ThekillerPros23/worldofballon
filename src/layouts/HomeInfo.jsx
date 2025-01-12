@@ -28,6 +28,7 @@ function HomeInfo() {
             <Button
               size="lg"
               gradientDuoTone="cyanToBlue"
+              href="/register"
               className="font-semibold shadow-lg hover:scale-105 transition-transform"
             >
               Get Started
