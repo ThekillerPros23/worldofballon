@@ -43,41 +43,44 @@ function NavBar() {
           World of Balloons Panamá
         </span>
       </Navbar.Brand>
-      <Navbar.Toggle />
-      <Navbar.Collapse>
-        <Navbar.Link
-          href="/"
-          active={true}
-          className="hover:text-gray-300 transition-colors"
-        >
-          Inicio
-        </Navbar.Link>
-        <Navbar.Link
-          href="/productos"
-          className="hover:text-gray-300 transition-colors"
-        >
-          Productos
-        </Navbar.Link>
-        <Navbar.Link
-          href="/servicios"
-          className="hover:text-gray-300 transition-colors"
-        >
-          Servicios
-        </Navbar.Link>
-        <Navbar.Link
-          href="/contacto"
-          className="hover:text-gray-300 transition-colors"
-        >
-          Contacto
-        </Navbar.Link>
-        <Navbar.Link
-          href="/nosotros"
-          className="hover:text-gray-300 transition-colors"
-        >
-          Nosotros
-        </Navbar.Link>
+      <div className="flex items-center space-x-4">
+        {/* Menú principal */}
+        <Navbar.Toggle />
+        <Navbar.Collapse>
+          <Navbar.Link
+            href="/"
+            active={true}
+            className="hover:text-gray-300 transition-colors"
+          >
+            Inicio
+          </Navbar.Link>
+          <Navbar.Link
+            href="/productos"
+            className="hover:text-gray-300 transition-colors"
+          >
+            Productos
+          </Navbar.Link>
+          <Navbar.Link
+            href="/servicios"
+            className="hover:text-gray-300 transition-colors"
+          >
+            Servicios
+          </Navbar.Link>
+          <Navbar.Link
+            href="/contacto"
+            className="hover:text-gray-300 transition-colors"
+          >
+            Contacto
+          </Navbar.Link>
+          <Navbar.Link
+            href="/nosotros"
+            className="hover:text-gray-300 transition-colors"
+          >
+            Nosotros
+          </Navbar.Link>
+        </Navbar.Collapse>
 
-        {/* Si el usuario está autenticado, muestra el avatar con el dropdown */}
+        {/* Si el usuario está autenticado, muestra el avatar con dropdown */}
         {user ? (
           <Dropdown
             arrowIcon={true}
@@ -86,6 +89,7 @@ function NavBar() {
               <Avatar
                 img={user.photoURL || "https://via.placeholder.com/150"}
                 rounded={true}
+                className="h-10 w-10"
               />
             }
           >
@@ -102,24 +106,15 @@ function NavBar() {
           </Dropdown>
         ) : (
           // Si no está autenticado, muestra el botón de "Iniciar Sesión"
-          <>
-            <Button
-              href="/login"
-              gradientDuoTone="purpleToBlue"
-              className="hidden md:block"
-            >
-              Iniciar Sesión
-            </Button>
-            <Button
-              href="/login"
-              gradientDuoTone="purpleToBlue"
-              className="block md:hidden mt-3"
-            >
-              Iniciar Sesión
-            </Button>
-          </>
+          <Button
+            href="/login"
+            gradientDuoTone="purpleToBlue"
+            className="hidden md:block"
+          >
+            Iniciar Sesión
+          </Button>
         )}
-      </Navbar.Collapse>
+      </div>
     </Navbar>
   );
 }
