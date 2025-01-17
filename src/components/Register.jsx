@@ -1,17 +1,29 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../auth/FirebaseAuth";
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  onAuthStateChanged, // Importar onAuthStateChanged
 } from "firebase/auth";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // Inicializar useNavigate
+  const navigate = useNavigate();
+
+  // Verificar el estado de autenticación
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Si el usuario está autenticado, redirigir al dashboard
+        navigate("/dashboard");
+      }
+    });
+    return () => unsubscribe(); // Limpiar el listener cuando el componente se desmonte
+  }, [navigate]);
 
   const handleEmailRegister = async (e) => {
     e.preventDefault();
@@ -28,7 +40,7 @@ function Register() {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      navigate("/login"); // Redirigir al inicio después del registro con Google
+      navigate("/dashboard"); // Redirigir al dashboard después del registro con Google
     } catch (err) {
       setError(err.message);
     }
